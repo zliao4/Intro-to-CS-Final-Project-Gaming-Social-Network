@@ -163,8 +163,15 @@ def add_new_user(network, user, games):
 #   himself/herself. It is also OK if the list contains a user's primary 
 #   connection that is a secondary connection as well.
 def get_secondary_connections(network, user):
-	return []
-
+    if user not in network:
+        return None
+    else:
+        secondary_connections=[]
+        for i in network[user][0]:
+            for m in network[i][0]:
+                if m not in secondary_connections:
+                    secondary_connections.append(m)
+    	return secondary_connections
 # ----------------------------------------------------------------------------- 	
 # count_common_connections(network, user_A, user_B): 
 #   Finds the number of people that user_A and user_B have in common.
@@ -234,6 +241,6 @@ print get_games_liked(net, "John")
 print add_connection(net, "John", "Freda")
 print add_new_user(net, "Debra", []) 
 print add_new_user(net, "Nick", ["Seven Schemers", "The Movie: The Game"]) # True
-#print get_secondary_connections(net, "Mercedes")
+print get_secondary_connections(net, "Mercedes")
 #print count_common_connections(net, "Mercedes", "John")
 #print find_path_to_friend(net, "John", "Ollie")
