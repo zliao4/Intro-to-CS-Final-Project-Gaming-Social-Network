@@ -1,3 +1,4 @@
+
 # Example string input. Use it to test your code.
 example_input="John is connected to Bryant, Debra, Walter.\
 John likes to play The Movie: The Game, The Legend of Corgi, Dinosaur Diner.\
@@ -54,7 +55,7 @@ def create_data_structure(string_input):
             name_connected_string=i[i.find(' is connected to ')+17:]
             network[user]=[name_connected_string.split(', ')]
         if ' likes to play ' in i:
-            game_liked_string=i[i.find(' likes to play ')+14:]
+            game_liked_string=i[i.find(' likes to play ')+15:]
             network[user].append(game_liked_string.split(', '))
     return network
 
@@ -119,7 +120,8 @@ def add_connection(network, user_A, user_B):
     if user_A not in network or user_B not in network:
         return False
     else:
-        network[user_A][0].append(user_B)
+        if user_B not in network[user_A][0]:
+            network[user_A][0].append(user_B)
         return network
 
 # ----------------------------------------------------------------------------- 
@@ -141,7 +143,7 @@ def add_connection(network, user_A, user_B):
 #     the user's game preferences)
 def add_new_user(network, user, games):
     if user not in network:
-        network[user]=[[],[games]]
+        network[user]=[[],games]
     return network
 		
 # ----------------------------------------------------------------------------- 
@@ -172,6 +174,7 @@ def get_secondary_connections(network, user):
                 if m not in secondary_connections:
                     secondary_connections.append(m)
     	return secondary_connections
+
 # ----------------------------------------------------------------------------- 	
 # count_common_connections(network, user_A, user_B): 
 #   Finds the number of people that user_A and user_B have in common.
@@ -185,7 +188,14 @@ def get_secondary_connections(network, user):
 #   The number of connections in common (as an integer).
 #   - If user_A or user_B is not in network, return False.
 def count_common_connections(network, user_A, user_B):
-    return 0
+    count=0
+    if user_A not in network or user_B not in network:
+        return False
+    else:
+        for i in network[user_A][0]:
+            if i in network[user_B][0]:
+                count+=1
+        return count
 
 # ----------------------------------------------------------------------------- 
 # find_path_to_friend(network, user_A, user_B): 
@@ -220,9 +230,7 @@ def count_common_connections(network, user_A, user_B):
 #   may safely add default parameters since all calls used in the grading script 
 #   will only include the arguments network, user_A, and user_B.
 def find_path_to_friend(network, user_A, user_B):
-	# your RECURSIVE solution here!
-	return None
-
+    return None
 # Make-Your-Own-Procedure (MYOP)
 # ----------------------------------------------------------------------------- 
 # Your MYOP should either perform some manipulation of your network data 
@@ -242,5 +250,5 @@ print add_connection(net, "John", "Freda")
 print add_new_user(net, "Debra", []) 
 print add_new_user(net, "Nick", ["Seven Schemers", "The Movie: The Game"]) # True
 print get_secondary_connections(net, "Mercedes")
-#print count_common_connections(net, "Mercedes", "John")
-#print find_path_to_friend(net, "John", "Ollie")
+print count_common_connections(net, "Mercedes", "John")
+print find_path_to_friend(net, "John", "Ollie")
