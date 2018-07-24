@@ -229,7 +229,29 @@ def count_common_connections(network, user_A, user_B):
 #   in this procedure to keep track of nodes already visited in your search. You 
 #   may safely add default parameters since all calls used in the grading script 
 #   will only include the arguments network, user_A, and user_B.
-def find_path_to_friend(network, user_A, user_B):
+def find_path_to_friend(network, user_A, user_B,checked=None):
+    if checked:
+        checked = checked
+    else:
+        checked=[]
+    
+    checked.append(user_A)
+    path=[user_A]
+    
+    if user_A not in network or user_B not in network:
+        return None
+        
+    if user_B in network[user_A][0]:
+        path.append(user_B)
+        return path
+        
+    else:
+        for i in network[user_A][0]:
+            if i not in checked:
+                m=find_path_to_friend(network,i,user_B,checked)
+                if m:
+                    path+=m
+                    return path
     return None
 # Make-Your-Own-Procedure (MYOP)
 # ----------------------------------------------------------------------------- 
